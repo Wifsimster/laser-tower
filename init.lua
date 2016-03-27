@@ -4,10 +4,6 @@ require('config')
 wifi.setmode(wifi.STATION)
 wifi.sta.config(AP,PWD)
 
--- Declare GPIO
-gpio_0 = 3
-gpio_2 = 4
-
 -- Duty values
 RIGHT = 1
 CENTER = 510
@@ -18,11 +14,6 @@ servo = {}
 servo.pin = 4 -- GPIO_2
 servo.clock = 500 -- PWM frequency (1 to 1000)
 servo.duty = 512 -- PWM duty cycle (0 to 1023)
-
--- Init servo motor
-gpio.mode(servo.pin, gpio.OUTPUT)
-gpio.write(servo.pin, gpio.LOW)
-pwm.setup(servo.pin, servo.clock, servo.duty)
 
 function delay_ms(milli_secs)
    local ms = milli_secs * 1000
@@ -64,8 +55,9 @@ srv:listen(80,function(conn)
             print('Rotate to center')
             rotate(CENTER)
         elseif(_GET.rotate == "RANDOM")then
-            print('Random')
-            rotate(math.random(RIGHT, LEFT))
+            rd = math.random(RIGHT, LEFT)
+            print('Random: '.. rd)
+            rotate(rd)
         elseif(_GET.rotate == "RIGHT")then
             print('Rotate to right')
             rotate(RIGHT)
